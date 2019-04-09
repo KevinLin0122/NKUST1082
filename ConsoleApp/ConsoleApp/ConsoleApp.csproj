@@ -4,6 +4,21 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <StartupObject>YC.ConsoleApp.Program</StartupObject>
+    <RootNamespace>YC.ConsoleApp</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="App_Data\datagovtw_dataset_20181005.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App_Data\datagovtw_dataset_20181005.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
 
 </Project>

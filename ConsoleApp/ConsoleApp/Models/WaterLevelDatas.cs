@@ -4,7 +4,7 @@ using System.Text;
 
 namespace YC.ConsoleApp.Models
 {
-    public class WaterLevelRealTime
+    public class WaterLevelDatas
     {
         public List<WaterLevelRecord> Value { get; set; }
     }

@@ -18,8 +18,12 @@ namespace YC.ConsoleApp
             //var nodes = findOpenData();
             //showOpenData(nodes);
 
-            var waterData = findWaterLevelRealTimeData();
-            showWaterData(waterData);
+            //var waterData = findWaterLevelRealTimeData();
+            //showWaterData(waterData);
+
+
+            var stations = findStations();
+            showStations(stations);
             Console.ReadKey();
 
         }
@@ -49,38 +53,29 @@ namespace YC.ConsoleApp
                 item.服務分類 = getValue(node, "服務分類");
                 result.Add(item);
             }
-
-            //result = nodes
-            //    .Where(x => !x.IsEmpty).ToList()
-            //    .Select(node =>
-            //    {
-            //        OpenData item = new OpenData();
-            //        item.ID = getValue(node, "ID");
-            //        item.資料集名稱 = getValue(node, "資料集名稱");
-            //        item.服務分類 = getValue(node, "服務分類");
-            //        item.資料集描述 = getValue(node, "資料集描述");
-            //        return item;
-
-            //    }).ToList();
             return result;
 
         }
 
-        static Models.WaterLevelRealTime findWaterLevelRealTimeData()
+        static Models.WaterLevelDatas findWaterLevelRealTimeData()
         {
-            Models.WaterLevelRealTime result;
+            Models.WaterLevelDatas result;
             WebClient wc = new WebClient();
             wc.Encoding = Encoding.UTF8;
             string jsonStr = wc.DownloadString("http://odata.wra.gov.tw/v4/RealtimeWaterLevel?$top=1000");
-            result= JsonConvert.DeserializeObject<Models.WaterLevelRealTime>(jsonStr);
-
-            //JObject array = JsonConvert.DeserializeObject<JObject>(jsonStr);
-            //JsonSerializer serializer = new JsonSerializer();
-            //Models.WaterLevelRealTime data = (Models.WaterLevelRealTime)serializer.Deserialize(new JTokenReader(array), typeof(Models.WaterLevelRealTime));
+            result= JsonConvert.DeserializeObject<Models.WaterLevelDatas>(jsonStr);
             return result;
         }
 
-
+        static Models.Stations findStations()
+        {
+            Models.Stations result;
+            WebClient wc = new WebClient();
+            wc.Encoding = Encoding.UTF8;
+            string jsonStr = wc.DownloadString(@"https://data.wra.gov.tw/Service/OpenData.aspx?format=json&id=28E06316-FE39-40E2-8C35-7BF070FD8697");
+            result = JsonConvert.DeserializeObject<Models.Stations>(jsonStr);
+            return result;
+        }
 
 
 
@@ -115,11 +110,21 @@ namespace YC.ConsoleApp
 
         }
 
-        private static void showWaterData(Models.WaterLevelRealTime data)
+        private static void showWaterData(Models.WaterLevelDatas data)
         {
             data.Value.ForEach(item =>
             {
                 Console.WriteLine($"Id:{item.StationIdentifier},Value:{item.WaterLevel}");
+
+
+            });
+
+        }
+        private static void showStations(Models.Stations data)
+        {
+            data.StationInfo.ForEach(item =>
+            {
+                Console.WriteLine($"Id:{item.BasinIdentifier},RiverName:{item.RiverName}");
 
 
             });
